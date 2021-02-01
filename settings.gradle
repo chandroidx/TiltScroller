@@ -1,0 +1,3 @@
+include ':TiltScroller'
+include ':app'
+rootProject.name = "TiltScrollerDemo"
