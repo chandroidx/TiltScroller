@@ -18,8 +18,6 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
     //==============================================================================================
     // Constant Define
     //==============================================================================================
-
-
     init {
         mSensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mGyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
@@ -33,39 +31,43 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
         private lateinit var mDevice: GlassDevice
 
         // Callback
+        @JvmStatic
         var onTiltListener: OnTiltListener? = null
 
         // Gyroscope Variables
         private lateinit var mSensorManager: SensorManager
         private lateinit var mGyroSensor: Sensor
-        private const val MANIPULATE = 100.toDouble()
-        private const val NS2S = 1.0F / 1000000000.0F
-        private const val RAD2DGR = (180 / PI)
+        private const val MANIPULATE= 100.toDouble()
+        private const val NS2S        = 1.0F / 1000000000.0F
+        private const val RAD2DGR   = (180 / PI)
 
         // Calculate Gyroscope
-        private var timestamp = 0.0
-        private var dt = 0.0
-        private var pitchX = 0.0
-        private var pitchY = 0.0
-        private var pitchZ = 0.0
+        private var mTimeStamp   = 0.0
+        private var dt          = 0.0
+        private var pitchX      = 0.0
+        private var pitchY      = 0.0
+        private var pitchZ      = 0.0
 
-        private var horizontal = 0
-        private var vertical = 0
+        private var horizontal  = 0
+        private var vertical    = 0
 
         private var mRecyclerView: RecyclerView? = null
 
+        @JvmStatic
         var scrollable = true
 
 
         private val mSensorListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
-                dt = (event.timestamp - timestamp) * NS2S
-                pitchX = event.values[0].toDouble()
-                pitchY = event.values[1].toDouble()
-                pitchZ = event.values[2].toDouble()
-                timestamp = event.timestamp.toDouble()
+                with(event){
+                    dt = (timestamp - mTimeStamp) * NS2S
+                    pitchX = values[0].toDouble()
+                    pitchY = values[1].toDouble()
+                    pitchZ = values[2].toDouble()
+                    mTimeStamp = timestamp.toDouble()
+                }
 
-                if (dt - timestamp * NS2S != 0.0) {
+                if (dt - mTimeStamp * NS2S != 0.0) {
                     pitchX *= dt
                     pitchY *= dt
                     pitchZ *= dt
@@ -99,11 +101,13 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
         //==============================================================================================
         // Use
         //==============================================================================================
+        @JvmStatic
         fun init(context: Context, device: GlassDevice) {
             instance =
                 TiltScroller(context, device)
         }
 
+        @JvmStatic
         fun init(context: Context) {
             instance =
                 TiltScroller(
@@ -113,6 +117,7 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
         }
 
         // Gyroscope Variables
+        @JvmStatic
         fun registerSensor() {
             mSensorManager.registerListener(
                 mSensorListener,
@@ -121,6 +126,7 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
             )
         }
 
+        @JvmStatic
         fun destroy() {
             mSensorManager.unregisterListener(
                 mSensorListener
@@ -133,6 +139,7 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
                 )
         }
 
+        @JvmStatic
         fun setRecyclerView(recyclerView: RecyclerView) {
             mRecyclerView = recyclerView
         }
