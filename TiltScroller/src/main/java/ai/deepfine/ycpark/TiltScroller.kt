@@ -22,12 +22,13 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
         mSensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mGyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
         mDevice = device
+        mContext = context
     }
 
     companion object {
         // Constructor parameters
         private lateinit var instance: TiltScroller
-        private lateinit var context: Context
+        private lateinit var mContext: Context
         private lateinit var mDevice: GlassDevice
 
         // Callback
@@ -134,7 +135,7 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
             scrollable = true
             instance =
                 TiltScroller(
-                    context,
+                    mContext,
                     mDevice
                 )
         }
