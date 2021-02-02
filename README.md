@@ -38,7 +38,7 @@ If you use other devices, try put written above
 
 Use
 ```Kotlin
-class MainActivity : AppCompatActivity(), OnTiltListener, OnSwipeListener{
+class MainActivity : AppCompatActivity(), OnTiltListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
