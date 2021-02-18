@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.PI
 
@@ -55,7 +56,7 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
         private var mRecyclerView: RecyclerView? = null
 
         @JvmStatic
-        var scrollable = true
+        lateinit var scrollable : MutableLiveData<Boolean>
 
 
         private val mSensorListener = object : SensorEventListener {
@@ -86,7 +87,7 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
                     }
                 }
 
-                if (scrollable) {
+                if (scrollable.value!!) {
                     onTiltListener?.onTilt(
                         horizontal.toFloat(), vertical.toFloat())
                     mRecyclerView?.smoothScrollBy(-horizontal, -vertical)
@@ -106,15 +107,13 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
         fun init(context: Context, device: GlassDevice) {
             instance =
                 TiltScroller(context, device)
+
+            scrollable.value = true
         }
 
         @JvmStatic
         fun init(context: Context) {
-            instance =
-                TiltScroller(
-                    context,
-                    GlassDevice.REALWEAR
-                )
+            init(context, GlassDevice.REALWEAR)
         }
 
         // Gyroscope Variables
@@ -132,7 +131,7 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
             mSensorManager.unregisterListener(
                 mSensorListener
             )
-            scrollable = true
+            scrollable.value = true
             instance =
                 TiltScroller(
                     mContext,
