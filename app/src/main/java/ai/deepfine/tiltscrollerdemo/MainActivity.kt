@@ -4,17 +4,21 @@ import ai.deepfine.ycpark.OnTiltListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ai.deepfine.ycpark.TiltScroller
-import android.util.Log
+import android.widget.TextView
 import com.ycpark.tiltscrollerdemo.R
 
 class MainActivity : AppCompatActivity(), OnTiltListener {
+    private lateinit var textView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        textView = findViewById(R.id.test)
+
         TiltScroller.init(this)
 
-        TiltScroller.registerSensor()
+        TiltScroller.registerSensorListener()
 
         TiltScroller.onTiltListener = this
     }
@@ -26,7 +30,7 @@ class MainActivity : AppCompatActivity(), OnTiltListener {
     }
 
     override fun onTilt(horizontal: Float, vertical: Float) {
-        Log.d("PYC", "horizontal : " + horizontal + "\t" + "vertical : " + vertical)
+        textView.text = "horizontal : " + horizontal + "\n" + "vertical : " + vertical
     }
 
 }

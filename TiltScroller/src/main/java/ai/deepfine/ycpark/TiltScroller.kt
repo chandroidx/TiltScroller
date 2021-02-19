@@ -20,31 +20,35 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
     // Constant Define
     //==============================================================================================
     init {
-        mSensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        mGyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
-        mDevice = device
+        mDevice  = device
         mContext = context
     }
 
     companion object {
         // Constructor parameters
-        private lateinit var instance: TiltScroller
-        private lateinit var mContext: Context
-        private lateinit var mDevice: GlassDevice
+        private lateinit var instance : TiltScroller
+        private lateinit var mContext : Context
+        private lateinit var mDevice  : GlassDevice
 
         // Callback
         @JvmStatic
         var onTiltListener: OnTiltListener? = null
 
         // Gyroscope Variables
-        private lateinit var mSensorManager: SensorManager
-        private lateinit var mGyroSensor: Sensor
+        private val mSensorManager: SensorManager by lazy {
+            mContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        }
+
+        private val mGyroSensor: Sensor by lazy {
+            mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+        }
+
         private const val MANIPULATE= 100.toDouble()
         private const val NS2S        = 1.0F / 1000000000.0F
         private const val RAD2DGR   = (180 / PI)
 
         // Calculate Gyroscope
-        private var mTimeStamp   = 0.0
+        private var mTimeStamp  = 0.0
         private var dt          = 0.0
         private var pitchX      = 0.0
         private var pitchY      = 0.0
@@ -56,12 +60,11 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
         private var mRecyclerView: RecyclerView? = null
 
         @JvmStatic
-        lateinit var scrollable : MutableLiveData<Boolean>
-
+        val scrollable: MutableLiveData<Boolean> = MutableLiveData()
 
         private val mSensorListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
-                with(event){
+                with(event) {
                     dt = (timestamp - mTimeStamp) * NS2S
                     pitchX = values[0].toDouble()
                     pitchY = values[1].toDouble()
@@ -89,7 +92,8 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
 
                 if (scrollable.value!!) {
                     onTiltListener?.onTilt(
-                        horizontal.toFloat(), vertical.toFloat())
+                        horizontal.toFloat(), vertical.toFloat()
+                    )
                     mRecyclerView?.smoothScrollBy(-horizontal, -vertical)
                 }
 
@@ -116,9 +120,8 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
             init(context, GlassDevice.REALWEAR)
         }
 
-        // Gyroscope Variables
         @JvmStatic
-        fun registerSensor() {
+        fun registerSensorListener() {
             mSensorManager.registerListener(
                 mSensorListener,
                 mGyroSensor,
@@ -131,12 +134,7 @@ class TiltScroller private constructor(context: Context, device: GlassDevice) {
             mSensorManager.unregisterListener(
                 mSensorListener
             )
-            scrollable.value = true
-            instance =
-                TiltScroller(
-                    mContext,
-                    mDevice
-                )
+            init(mContext, mDevice)
         }
 
         @JvmStatic

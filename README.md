@@ -49,13 +49,13 @@ class MainActivity : AppCompatActivity(), OnTiltListener {
     override fun onResume() {
         super.onResume();
         
-        TiltScroller.registerSensor();
+        TiltScroller.registerSensorListener();
     }
 
     override fun void onPause() {
         super.onPause();
         
-        TiltScroller.unregisterSensor();
+        TiltScroller.destroy();
     }
 
     override fun onTilt(horizontal: Float, vertical: Float) {
@@ -66,5 +66,5 @@ class MainActivity : AppCompatActivity(), OnTiltListener {
 
 enable & disable Scrolling
 ```java
-TiltScroller.scrollable = (true|false);
+TiltScroller.scrollable.value = (true|false);
 ```
