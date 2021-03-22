@@ -1,9 +1,9 @@
 package ai.deepfine.tiltscrollerdemo
 
 import ai.deepfine.ycpark.OnTiltListener
+import ai.deepfine.ycpark.TiltScroller
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ai.deepfine.ycpark.TiltScroller
 import android.widget.TextView
 import com.ycpark.tiltscrollerdemo.R
 
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), OnTiltListener {
 
         TiltScroller.init(this)
 
-        TiltScroller.registerSensorListener()
+        TiltScroller.registerSensor(this)
 
         TiltScroller.onTiltListener = this
     }
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), OnTiltListener {
 
     override fun onPause() {
         super.onPause()
-        TiltScroller.destroy()
+        TiltScroller.unregisterSensor()
     }
 
     override fun onTilt(horizontal: Float, vertical: Float) {
