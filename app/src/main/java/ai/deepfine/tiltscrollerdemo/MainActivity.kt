@@ -1,5 +1,6 @@
 package ai.deepfine.tiltscrollerdemo
 
+import ai.deepfine.ycpark.Glass
 import ai.deepfine.ycpark.OnTiltListener
 import ai.deepfine.ycpark.TiltScroller
 import androidx.appcompat.app.AppCompatActivity
@@ -16,13 +17,17 @@ class MainActivity : AppCompatActivity(), OnTiltListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        TiltScroller.init(this)
+        TiltScroller.init(this, Glass.GOOGLE_GLASS)
 
-        TiltScroller.registerSensor(this)
-
-        TiltScroller.onTiltListener = this
+//        TiltScroller.registerSensor(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        TiltScroller.registerSensor { horizontal, vertical ->
+            onTilt(horizontal, vertical)
+        }
+    }
 
     override fun onPause() {
         super.onPause()
