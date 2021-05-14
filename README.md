@@ -5,8 +5,11 @@ Tilt Scrolling for Smart Glass
 It makes smart glass possible to scroll and swipe by tilting
 
 ## Support
-- minSdkVersion 16
-- targetSdkVersion 30
+    Realwear
+    Vuzix
+    Google Glass
+    
+    maybe other glasses work but not tested
 
 ## Setup
 Implementation (Latest Release : [![](https://jitpack.io/v/yc-park/TiltScroller.svg)](https://jitpack.io/#yc-park/TiltScroller) )
@@ -26,7 +29,7 @@ dependencies {
 ## How To Use
 Initialize in Application class
 ```Kotlin
-TiltScroller.init(context: Context, glassDevice: GlassDevice);
+TiltScroller.init(context: Context, glass : Glass);
 
     - Support - 
     REALWEAR,
@@ -38,33 +41,15 @@ If you use other devices, try put written above
 
 Use
 ```Kotlin
-class MainActivity : AppCompatActivity(), OnTiltListener {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        TiltScroller.onTiltListener = this
-    }
+TiltScroller.registerSensor(OnTiltListener)
+            or
+TiltScroller.registerSensor(()->Unit)
 
-    override fun onResume() {
-        super.onResume();
-        
-        TiltScroller.registerSensorListener();
-    }
-
-    override fun void onPause() {
-        super.onPause();
-        
-        TiltScroller.destroy();
-    }
-
-    override fun onTilt(horizontal: Float, vertical: Float) {
-        TODO("Not yet implemented")
-    }
-}
+you must call TiltScroller.unregisterSensor()
 ```
 
 enable & disable Scrolling
 ```java
-TiltScroller.scrollable.value = (true|false);
+TiltScroller.scrollable = (true|false);
 ```
