@@ -72,14 +72,10 @@ object TiltScroller {
         }
     }
 
-    fun init(context: Context, device: Glass) {
+    fun init(context: Context, device: Glass = Glass.REALWEAR) {
         sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         this.device = device
         scrollable = true
-    }
-
-    fun init(context: Context) {
-        init(context, Glass.REALWEAR)
     }
 
     fun registerSensor(onTiltListener: OnTiltListener) {

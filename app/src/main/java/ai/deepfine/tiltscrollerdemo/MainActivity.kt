@@ -1,8 +1,8 @@
 package ai.deepfine.tiltscrollerdemo
 
-import ai.deepfine.ycpark.Glass
 import ai.deepfine.ycpark.OnTiltListener
 import ai.deepfine.ycpark.TiltScroller
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity(), OnTiltListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        TiltScroller.init(this, Glass.GOOGLE_GLASS)
+        TiltScroller.init(this)
 
 //        TiltScroller.registerSensor(this)
     }
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), OnTiltListener {
         TiltScroller.unregisterSensor()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onTilt(horizontal: Float, vertical: Float) {
         textView.text = "horizontal : $horizontal\nvertical : $vertical"
     }
